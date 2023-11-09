@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    dirname = "Euro28"
+    dirname = "US26"
     data, results = import_data(dirname)
 
     data = data.reshape(100,300)
@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
     plt.suptitle("Experiment withoout preprocessing", fontsize=16)
     plt.tight_layout()
-    plt.savefig("img/experiment_without_preprocessing.png")
+    plt.savefig("img/experiment_without_preprocessing_us26.png")
     
 
     """
@@ -191,7 +191,7 @@ if __name__ == "__main__":
 
     plt.suptitle("Experiment with MinMaxScaler", fontsize=16)
     plt.tight_layout()
-    plt.savefig("img/experiment_with_minmaxscaler.png")
+    plt.savefig("img/experiment_with_minmaxscaler_us26.png")
 
     """
     Experiment with PCA
@@ -265,4 +265,4 @@ if __name__ == "__main__":
 
     plt.suptitle("Experiment with PCA", fontsize=16)
     plt.tight_layout()
-    plt.savefig("img/experiment_with_pca.png")
+    plt.savefig("img/experiment_with_pca_us26.png")
