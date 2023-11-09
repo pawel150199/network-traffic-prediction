@@ -4,6 +4,11 @@ import pandas as pd
 import numpy as np
 
 
+"""
+This code generate a graph with nodes and edges as a bitrate. It may help with understanding the problem.
+Image is saved in img directory as 'graph.png'
+"""
+
 # Load your data
 data = pd.read_csv("Euro28/request-set_1/requests.csv")
 
