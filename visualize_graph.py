@@ -5,6 +5,24 @@ import numpy as np
 import warnings
 
 def vizualization(path_to_data: str, save_path: str) -> None:
+    
+    """
+    Draw graph from raw csv data
+
+    Args:
+        path_to_data (str): From where read csv data
+        save_path (str): Path, where save graph image
+
+    Usage::
+
+    from visualize_graph import vizualization
+
+    path_to_data = "data"
+    save_path = "graph.png"
+    
+    vizualization(path_to_data=path_to_data, save_path=save_path)
+    """    
+
     warnings.filterwarnings("ignore")
     # Load your data
     data = pd.read_csv(path_to_data)
