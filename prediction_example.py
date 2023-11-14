@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
     # Data cleaning
     data = data.mean(axis=1)
+    print(f"Data  shape: {data.shape}")
     results = results[:, 3]
 
     if args.verbose:
