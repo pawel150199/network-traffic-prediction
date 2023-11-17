@@ -3,7 +3,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.neural_network import MLPRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.decomposition import PCA
+from sklearn.decomposition import MiniBatchSparsePCA
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import accuracy_score
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     dirname = "US26"
     data, results = import_data(dirname)
 
-    data = data.reshape(100,300)
+    data = data.mean(axis=1)
     results = results[:, 1]
 
     if args.verbose:
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_split(data, results, test_size=0.2, random_state=1410)
 
     # MLP
-    mlp = MLPRegressor(hidden_layer_sizes=5, batch_size=10, random_state=1410, warm_start=True)
+    mlp = MLPRegressor(hidden_layer_sizes=500, batch_size=30, random_state=1410, warm_start=True)
     mlp.fit(X_train, y_train)
     y_pred_mlp = mlp.predict(X_test)
     mae_mlp = mean_absolute_error(y_test, y_pred_mlp)
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
 
     # MLP
-    mlp = MLPRegressor(hidden_layer_sizes=5, batch_size=10, random_state=1410, warm_start=True)
+    mlp = MLPRegressor(hidden_layer_sizes=500, batch_size=30, random_state=1410, warm_start=True)
     mlp.fit(X_train_t, y_train)
     y_pred_mlp = mlp.predict(X_test_t)
     mae_mlp = mean_absolute_error(y_test, y_pred_mlp)
@@ -197,7 +197,7 @@ if __name__ == "__main__":
     Experiment with PCA
     """
 
-    pca = PCA()
+    pca = MiniBatchSparsePCA()
     pca.fit(X_train_t, y_train)
 
     X_train_pca = pca.transform(X_train)
@@ -205,7 +205,7 @@ if __name__ == "__main__":
 
 
     # MLP
-    mlp = MLPRegressor(hidden_layer_sizes=5, batch_size=10, random_state=1410, warm_start=True)
+    mlp = MLPRegressor(hidden_layer_sizes=500, batch_size=30, random_state=1410, warm_start=True)
     mlp.fit(X_train_pca, y_train)
     y_pred_mlp = mlp.predict(X_test_pca)
     mae_mlp = mean_absolute_error(y_test, y_pred_mlp)
