@@ -1,5 +1,5 @@
-from visualize_graph import vizualization
-from loggers import configureLogger
+from helpers.visualize_graph import vizualization
+from helpers.loggers import configureLogger
 import argparse
 import os
 

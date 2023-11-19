@@ -1,14 +1,14 @@
 import argparse
 from pickletools import optimize
 import warnings
-from import_data import import_data
+from helpers.import_data import import_data
 import matplotlib.pyplot as plt
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_absolute_error
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
-from loggers import configureLogger
+from helpers.loggers import configureLogger
 
 
 if __name__ == "__main__":

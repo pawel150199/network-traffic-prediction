@@ -8,7 +8,7 @@ from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from import_data import import_data
+from helpers.import_data import import_data
 import argparse
 import warnings
 
