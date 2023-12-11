@@ -4,26 +4,27 @@ import pandas as pd
 import numpy as np
 import warnings
 
-def vizualization(path_to_data: str, save_path: str) -> None:
+def visualization(path_to_data: str, save_path: str) -> None:
     
     """
     Draw graph from raw csv data
 
     Args:
-        path_to_data (str): From where read csv data
-        save_path (str): Path, where save graph image
+        path_to_data (str): Path to csv file which represents network graph
+        save_path (str): Path where save graph image
 
     Usage::
 
-    from visualize_graph import vizualization
+    from visualize_graph import visualization
 
     path_to_data = "data"
     save_path = "graph.png"
     
-    vizualization(path_to_data=path_to_data, save_path=save_path)
+    visualization(path_to_data=path_to_data, save_path=save_path)
     """    
 
     warnings.filterwarnings("ignore")
+
     # Load your data
     data = pd.read_csv(path_to_data)
 
@@ -62,8 +63,8 @@ def vizualization(path_to_data: str, save_path: str) -> None:
     # Create a color bar for edge colors
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=weight.min(), vmax=weight.max()))
     sm.set_array([])
-    plt.colorbar(sm, label="Edge Weights (Bitrate in Mbps)")
-
+    plt.colorbar(sm, label="Edges Weight (Bitrate in Mbps)")
     plt.tight_layout()
     plt.axis('off')
     plt.savefig(save_path)
+    
