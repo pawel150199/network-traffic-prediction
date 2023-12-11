@@ -6,14 +6,18 @@ from scipy.stats import rankdata
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import RepeatedStratifiedKFold
 
-class Evalutator(object):
-    def __init__(self, X: np.array, y: np.array, random_state: int = None, metrics: list = [], storage_dir: str = None, n_splits: int = 5, n_repeats: int = 2):
+class Evaluator(object):
+    def __init__(self, outputs: np.array,  X: np.array, y: np.array, random_state: int = None, metrics: list = [], storage_dir: str = None, n_splits: int = 5, n_repeats: int = 2):
         """Class is used for evaluate experiment"""
 
         self.random_state = random_state
         self.metrics = metrics
         self.n_repeats = n_repeats
         self.n_splits = n_splits
+        self.storage_dir = storage_dir
+        self.outputs = outputs
+        self.X = X
+        self.y = y
 
         if self.storage_dir is not None:
             return
@@ -28,8 +32,7 @@ class Evalutator(object):
         self.clfs = clfs
         rskf = RepeatedStratifiedKFold(n_splits=self.n_splits, n_repeats=self.n_repeats, random_state = self.random_state)
         # n_splits x n_repeats x clfs x metrics
-        self.scores = np.zeros(self.n_splits*self.n_repeats, len(self.clfs), len(self.metrics))
-
+        self.scores = np.zeros((self.n_splits*self.n_repeats, len(self.clfs), len(self.metrics)))
 
         for fold_id, (train, test) in enumerate(rskf.split(self.X, self.y)):
             for clf_id, clf_name in enumerate(clfs):
