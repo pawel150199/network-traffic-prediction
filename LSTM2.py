@@ -28,16 +28,16 @@ results = labels[:, 1]
 
 X_train, X_test, y_train, y_test = train_test_split(data, results, test_size=0.2, random_state=1410)
 
-#model = Sequential([layers.Input((100, 3)),
-#                    layers.LSTM(128),
-#                    layers.Dense(256, activation="relu"),
-#                    layers.Dense(256, activation="relu"),
-#                    layers.Dense(512, activation="relu"),
-#                    layers.Dense(256, activation="relu"),
-#                    layers.Dense(128, activation="relu"),
-#                    layers.Dense(64, activation="relu"),
-#                    layers.Dense(32, activation="relu"),
-#                    layers.Dense(1)])
+model = Sequential([layers.Input((100, 3)),
+                    layers.LSTM(128),
+                    layers.Dense(256, activation="relu"),
+                    layers.Dense(256, activation="relu"),
+                    layers.Dense(512, activation="relu"),
+                    layers.Dense(256, activation="relu"),
+                    layers.Dense(128, activation="relu"),
+                    layers.Dense(64, activation="relu"),
+                    layers.Dense(32, activation="relu"),
+                    layers.Dense(1)])
 
 model = Sequential([layers.Input((100, 3)),
                     layers.LSTM(21),
