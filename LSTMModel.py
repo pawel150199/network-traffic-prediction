@@ -35,12 +35,12 @@ class LSTM(tf.Module):
             metrics=metrics)
         return self
 
-    def fit(self, X_train: np.array, y_train: np.array, epochs: int=200):
-        self.model.fit(X_train, y_train, epochs=epochs)
+    def fit(self, X: np.array, y: np.array, epochs: int=200):        
+        self.model.fit(X, y, epochs=epochs)
         return self
 
-    def evaluate(self, X_test: np.array, y_test: np.array):
-        test_loss, test_acc = self.model.evaluate(X_test, y_test)
+    def evaluate(self, X: np.array, y: np.array):
+        test_loss, test_acc = self.model.evaluate(X, y)
         print(f'Accuracy: {test_acc}\nTest loss: {test_loss}')
 
     def predict(self, X: np.array):
@@ -49,7 +49,7 @@ class LSTM(tf.Module):
 
 if __name__ == "__main__":
     data, labels = import_data("Euro28")
-    results = labels[:, 1]
+    results = labels
 
     X_train, X_test, y_train, y_test = train_test_split(data, results, test_size=0.2, random_state=1410)
 

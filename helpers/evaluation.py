@@ -4,10 +4,10 @@ import warnings
 from sklearn.base import clone
 from scipy.stats import rankdata
 from sklearn.metrics import accuracy_score
-from sklearn.model_selection import RepeatedStratifiedKFold
+from sklearn.model_selection import RepeatedKFold
 
 class Evaluator(object):
-    def __init__(self, outputs: np.array,  X: np.array, y: np.array, random_state: int = None, metrics: list = [], storage_dir: str = None, n_splits: int = 5, n_repeats: int = 2):
+    def __init__(self, X: np.array, y: np.array, random_state: int = None, metrics: list = [], storage_dir: str = None, n_splits: int = 5, n_repeats: int = 2):
         """Class is used for evaluate experiment"""
 
         self.random_state = random_state
@@ -15,7 +15,6 @@ class Evaluator(object):
         self.n_repeats = n_repeats
         self.n_splits = n_splits
         self.storage_dir = storage_dir
-        self.outputs = outputs
         self.X = X
         self.y = y
 
@@ -30,25 +29,30 @@ class Evaluator(object):
         warnings.filterwarnings("ignore")
 
         self.clfs = clfs
-        rskf = RepeatedStratifiedKFold(n_splits=self.n_splits, n_repeats=self.n_repeats, random_state = self.random_state)
+        param_num = 4
+        rskf = RepeatedKFold(n_splits=self.n_splits, n_repeats=self.n_repeats, random_state = self.random_state)
         # n_splits x n_repeats x clfs x metrics
-        self.scores = np.zeros((self.n_splits*self.n_repeats, len(self.clfs), len(self.metrics)))
+        self.scores = np.zeros((param_num, self.n_splits*self.n_repeats, len(self.clfs), len(self.metrics)))
 
-        for fold_id, (train, test) in enumerate(rskf.split(self.X, self.y)):
-            for clf_id, clf_name in enumerate(clfs):
-                clf = clfs[clf_name]
-                clf.fit(self.X[train], self.y[train])
-                y_pred = clf.predict(self.X[test])
-                for metric_id, metric_name in enumerate(self.metrics):
-                # DATA X FOLD X CLASSIFIER X METRIC 
-                    self.scores[fold_id, clf_id, metric_id] = self.metrics[metric_name](self.y[test],y_pred)
+        for param_id in range(4):
+            X = self.X
+            y = self.y[:, param_id]
+            print(self.y[:, param_id])
+            for fold_id, (train, test) in enumerate(rskf.split(X, y)):
+                for clf_id, clf_name in enumerate(clfs):
+                    clf = clfs[clf_name]
+                    clf.fit(X[train], y[train])
+                    y_pred = clf.predict(X[test])
+                    for metric_id, metric_name in enumerate(self.metrics):
+                        # PARAM X FOLD X CLASSIFIER X METRIC 
+                        self.scores[param_id, fold_id, clf_id, metric_id] = self.metrics[metric_name](y[test],y_pred)
         
         self.mean = np.mean(self.scores, axis=1)
         self.std = np.std(self.scores, axis=1)
 
-        np.save(f"results/{self.storage_dir}/{result_name}", self.scores)
-        np.save(f"results/{self.storage_dir}/{result_name}-mean", self.mean)
-        np.save(f"results/{self.storage_dir}/{result_name}-std", self.std)
+        np.save(f"{self.storage_dir}/{result_name}", self.scores)
+        np.save(f"{self.storage_dir}/{result_name}-mean", self.mean)
+        np.save(f"{self.storage_dir}/{result_name}-std", self.std)
 
     def process_ranks(self, result_name):
         """Calculate global ranks"""
@@ -72,4 +76,4 @@ class Evaluator(object):
         self.mean_ranks = np.array(self.mean_ranks)
         self.ranks = np.array(self.ranks)
 
-        np.save(f"results/{self.storage_dir}/{result_name}", self.ranks)
+        np.save(f"{self.storage_dir}/{result_name}", self.ranks)

@@ -35,12 +35,12 @@ class GRU(tf.Module):
             metrics=metrics)
         return self
 
-    def fit(self, X_train: np.array, y_train: np.array, epochs: int=200):
-        self.model.fit(X_train, y_train, epochs=epochs)
+    def fit(self, X: np.array, y: np.array, epochs: int=200):
+        self.model.fit(X, y, epochs=epochs)
         return self
 
-    def evaluate(self, X_test: np.array, y_test: np.array):
-        test_loss, test_acc = self.model.evaluate(X_test, y_test)
+    def evaluate(self, X: np.array, y: np.array):
+        test_loss, test_acc = self.model.evaluate(X, y)
         print(f'Accuracy: {test_acc}\nTest loss: {test_loss}')
 
     def predict(self, X: np.array):
