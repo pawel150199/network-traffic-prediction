@@ -4,30 +4,35 @@ from keras.optimizers import Adam
 from keras import layers
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 from helpers.import_data import import_data
 
 import warnings
 
+
 warnings.filterwarnings("ignore")
 
-class CNN(tf.Module):
+class GRU(tf.Module):
     def __init__(self):
         super().__init__()
-        
+    
 
     def build_model(self, loss: str="mse", learning_rate: float=0.001, metrics: list=["mean_absolute_error"]):
-        self.model = Sequential([layers.Conv2D(filters=32, kernel_size=(3,3), padding="same", activation="relu", input_shape=(25,12,1)),
-                    layers.Conv2D(filters=32, kernel_size=(3,3), padding="same", activation="relu"),
-                    layers.MaxPooling2D(pool_size=(2,2)),
-                    layers.Flatten(),
+        self.model = Sequential([layers.Input((100, 3)),
+                    layers.GRU(units=128, activation='tanh'),
+                    layers.Dense(256, activation="relu"),
+                    layers.Dense(256, activation="relu"),
+                    layers.Dense(512, activation="relu"),
+                    layers.Dense(256, activation="relu"),
                     layers.Dense(128, activation="relu"),
+                    layers.Dense(64, activation="relu"),
+                    layers.Dense(32, activation="relu"),
                     layers.Dense(1)
                 ])
         self.model.compile(loss=loss,
             optimizer=Adam(learning_rate=learning_rate),
             metrics=metrics)
-
         return self
 
     def fit(self, X_train: np.array, y_train: np.array, epochs: int=200):
@@ -36,7 +41,7 @@ class CNN(tf.Module):
 
     def evaluate(self, X_test: np.array, y_test: np.array):
         test_loss, test_acc = self.model.evaluate(X_test, y_test)
-        print(f'Accuracy: {test_acc}\nLoss: {test_loss}')
+        print(f'Accuracy: {test_acc}\nTest loss: {test_loss}')
 
     def predict(self, X: np.array):
         pred = self.model.predict(X)
@@ -44,12 +49,11 @@ class CNN(tf.Module):
 
 if __name__ == "__main__":
     data, labels = import_data("Euro28")
-    data = np.reshape(data, (100,25,12,1))
-    results = labels[:, 2]
+    results = labels[:, 1]
 
     X_train, X_test, y_train, y_test = train_test_split(data, results, test_size=0.2, random_state=1410)
 
-    cnn = CNN()
+    cnn = GRU()
     model = cnn.build_model()
     model.fit(X_train, y_train)
     pred = model.predict(X_test)
