@@ -9,6 +9,7 @@ from sklearn.linear_model import LinearRegression
 
 from helpers.import_data import import_data
 from helpers.evaluation import Evaluator
+from helpers.statistic_test_evaluation import StatisticTest
 from LSTMModel import LSTM
 from GRUModel import GRU
 from CNNModel import CNN
@@ -54,6 +55,8 @@ def main(name: str, dataset: str):
     )
     ev.evaluate(clfs, result_name=f"scores_{name}")
     ev.process_ranks(result_name=f"ranks_{name}")
+    st = StatisticTest(ev)
+    st.process(table_name="tstudent_{name}")
 
 
 if __name__ == "__main__":
