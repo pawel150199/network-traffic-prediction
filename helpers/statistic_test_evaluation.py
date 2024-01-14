@@ -4,7 +4,7 @@ import warnings
 import os
 from tabulate import tabulate
 from scipy.stats import ttest_ind
-from scipy.stats import rankdata, ranksums
+from scipy.stats import ranksums
 
 
 """ 

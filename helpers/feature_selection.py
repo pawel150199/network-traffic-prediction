@@ -1,7 +1,6 @@
 from typing import Any
 import numpy as np
 from sklearn.tree import DecisionTreeRegressor
-from helpers.import_data import import_data
 
 class FeatureSelection(object):
     def __init__(self, random_state: int = None) -> None:

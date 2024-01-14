@@ -1,13 +1,10 @@
-from unicodedata import name
-import numpy as np
-import matplotlib.pyplot as plt
+import warnings
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
-import warnings
 
 from helpers.import_data import import_data
 from helpers.evaluation import Evaluator
@@ -47,6 +44,5 @@ def main(name: str, dataset: str):
     ev.process_ranks(result_name=f"ranks_{name}")
 
 if __name__ == "__main__":
-    main(name="simple_models", dataset="Euro28")
-
-
+    main(name="main_evaluation_euro28", dataset="Euro28")
+    main(name="main_evaluation_us26", dataset="US26")

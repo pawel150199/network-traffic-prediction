@@ -1,9 +1,6 @@
 import numpy as np
-import os
 import warnings
-from sklearn.base import clone
 from scipy.stats import rankdata
-from sklearn.metrics import accuracy_score
 from sklearn.model_selection import RepeatedKFold
 
 class Evaluator(object):
