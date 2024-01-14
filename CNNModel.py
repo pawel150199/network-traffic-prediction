@@ -32,22 +32,22 @@ class CNN(tf.Module):
         return self
 
     def fit(self, X: np.array, y: np.array, epochs: int=200):
-        X = np.reshape(X, (100,25,12,1))
+        X = np.reshape(X, (len(X),25,12,1))
         self.model.fit(X, y, epochs=epochs)
         return self
 
     def evaluate(self, X: np.array, y: np.array):
-        X = np.reshape(X, (100,25,12,1))
         test_loss, test_acc = self.model.evaluate(X, y)
         print(f'Accuracy: {test_acc}\nLoss: {test_loss}')
 
     def predict(self, X: np.array):
+        X = np.reshape(X, (len(X),25,12,1))
         pred = self.model.predict(X)
         return np.array(pred).flatten()
 
 if __name__ == "__main__":
     data, labels = import_data("Euro28")
-    data = np.reshape(data, (100,25,12,1))
+    #data = np.reshape(data, (100,25,12,1))
     results = labels[:, 2]
 
     X_train, X_test, y_train, y_test = train_test_split(data, results, test_size=0.2, random_state=1410)

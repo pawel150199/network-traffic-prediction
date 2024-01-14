@@ -20,6 +20,8 @@ warnings.filterwarnings("ignore")
 data, labels = import_data("Euro28")
 #data = data.reshape(100,300)
 
+print(data.shape)
+
 data = np.reshape(data, (100,25,12,1))
 
 print(data.shape)
