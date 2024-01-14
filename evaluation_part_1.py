@@ -1,5 +1,6 @@
 from helpers.import_data import import_data
 import numpy as np
+from tabulate import tabulate
 from helpers.feature_selection import FeatureSelection
 from sklearn.model_selection import RepeatedStratifiedKFold, RepeatedKFold
 from helpers.loggers import configureLogger
@@ -18,6 +19,7 @@ from helpers.evaluation import Evaluator
 from sklearn.tree import DecisionTreeRegressor
 from helpers.feature_selection import FeatureSelection
 import matplotlib.pyplot as plt
+from scipy.stats import ttest_rel
 from tqdm import tqdm
 import warnings
 import pandas as pd
@@ -53,15 +55,21 @@ def main(number):
     data = data.reshape(100, 300)
     results = results[:, number]
 
-    rfk = RepeatedKFold(n_splits=3, n_repeats=2, random_state=42)
+    rfk = RepeatedKFold(n_splits=5, n_repeats=2, random_state=42)
     fig, axes = plt.subplots(nrows=len(clfs), ncols=1, figsize=(12, 7 * len(clfs)))
+
+    r2_exp = np.zeros(shape=(len(clfs), 2 * 5))
+    r2_exp_fs = np.zeros(shape=(len(clfs), 2 * 5))
+
     for i, (clf_name, clf_model) in enumerate(clfs.items()):
         fold_y_pred = []
         fold_y_pred_fs = []
         fold_y_test = []
+        fold_y_r2 = []
         fold_y_test_fs = []
+        fold_y_r2_fs = []
 
-        for train_index, test_index in rfk.split(data, results):
+        for fold_idx, (train_index, test_index) in enumerate(rfk.split(data, results)):
             X_train, X_test = data[train_index], data[test_index]
             scaler = StandardScaler()
             X_train = scaler.fit_transform(X_train)
@@ -77,6 +85,8 @@ def main(number):
             r2_score_metric = r2_score(y_test, y_pred)
             fold_y_pred.append(y_pred)
             fold_y_test.append(y_test)
+            fold_y_r2.append(r2_score_metric)
+            r2_exp[i, fold_idx] = r2_score_metric
 
             fs = FeatureSelection(RANDOM_STATE)
             fs.fit(X_train_fs, y_train)
@@ -86,9 +96,11 @@ def main(number):
             clf_fs = clf_model
             clf_fs.fit(X_train_t, y_train)
             y_pred_fs = clf_fs.predict(X_test_t)
-            r2_score_metric = r2_score(y_test_fs, y_pred_fs)
+            r2_score_metric_fs = r2_score(y_test_fs, y_pred_fs)
             fold_y_pred_fs.append(y_pred_fs)
             fold_y_test_fs.append(y_test_fs)
+            fold_y_r2_fs.append(r2_score_metric_fs)
+            r2_exp_fs[i, fold_idx] = r2_score_metric_fs
 
         dimensions = [arr.shape[0] for arr in fold_y_pred]
         min_dimension = min(dimensions)
@@ -136,6 +148,22 @@ def main(number):
     plt.tight_layout()
     plt.savefig(f"img/basic_regressors_{parameters[number]}.png")
 
+    data = []
+    headers = ["clfs"]
+    headers.append(f"statistic | p_value")
+    for j in range(len(clfs)):
+        row_data = [f"{list(clfs.keys())[j]}"]
+        result = ttest_rel(r2_exp[j, :], r2_exp_fs[j, :])
+        row_data.extend(
+            [
+                f"{round(result[0],3)} [{result.statistic > 0}] | {round(result[1],3)} [{result.pvalue < 0.05}]",
+            ]
+        )
+        data.append(row_data)
+    table = tabulate(data, headers, tablefmt="grid")
+    with open(f"results/basic_regressors_{parameters[number]}.txt", "w") as file:
+        file.write(table)
+
 
 if __name__ == "__main__":
-    main(0)
+    main(3)
