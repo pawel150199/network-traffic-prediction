@@ -62,22 +62,24 @@ class Evaluator(object):
                 for clf_id, clf_name in enumerate(clfs):
                     X_test = X[test]
                     X_train = X[train]
-                    if clf_name in ["CART", "KNN", "SVR", "RF", "MLP", "LR"]:
+                    if clf_name in ["CART", "KNN", "SVR", "RF", "LR"]:
                         X_test = X_test.reshape((len(test), 300))
                         X_train = X_train.reshape((len(train), 300))
-                    if self.feature_selection == True:
-                        fs = FeatureSelection(self.random_state)
-                        fs.fit(X_train, y[train])
-                        X_train = fs.transform(X_train)
-                        X_test = fs.transform(X_test)
+                        if self.feature_selection:
+                            fs = FeatureSelection(self.random_state)
+                            fs.fit(X_train, y[train])
+                            X_train = fs.transform(X_train)
+                            X_test = fs.transform(X_test)
+                    elif clf_name == "MLP":
+                        X_test = X_test.reshape((len(test), 300))
+                        X_train = X_train.reshape((len(train), 300))
                     clf = clfs[clf_name]
                     clf.fit(X_train, y[train])
+                    print(X_train.shape)
                     y_pred = clf.predict(X_test)
                     for metric_id, metric_name in enumerate(self.metrics):
                         # PARAM X FOLD X CLASSIFIER X METRIC
-                        self.scores[
-                            param_id, fold_id, clf_id, metric_id
-                        ] = self.metrics[metric_name](y[test], y_pred)
+                        self.scores[param_id, fold_id, clf_id, metric_id] = self.metrics[metric_name](y[test], y_pred)
 
         self.mean = np.mean(self.scores, axis=1)
         self.std = np.std(self.scores, axis=1)

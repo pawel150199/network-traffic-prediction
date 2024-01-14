@@ -27,14 +27,14 @@ def main(name: str, dataset: str):
     # Clasificators
     clfs = {
         "CART" : DecisionTreeRegressor(random_state=RANDOM_STATE),
-        "KNN" : KNeighborsRegressor(),
         "SVR" : SVR(kernel="poly"),
+        "KNN" : KNeighborsRegressor(),
         "RF" : RandomForestRegressor(random_state=RANDOM_STATE),
         "MLP" : MLPRegressor(hidden_layer_sizes=50, batch_size=25, random_state=RANDOM_STATE, warm_start=True),
         "LR" : LinearRegression(),
-        #"LSTM" : LSTM().build_model(),
-        #"GRU" : GRU().build_model(),
-        #"CNN" : CNN().build_model()
+        "LSTM" : LSTM().build_model(),
+        "GRU" : GRU().build_model(),
+        "CNN" : CNN().build_model()
     }
 
     # Metrics
@@ -56,4 +56,4 @@ def main(name: str, dataset: str):
 
 if __name__ == "__main__":
     main(name="main_evaluation_euro28", dataset="Euro28")
-    # main(name="main_evaluation_us26", dataset="US26")
+    main(name="main_evaluation_us26", dataset="US26")
