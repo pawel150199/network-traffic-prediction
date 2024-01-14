@@ -18,7 +18,7 @@ class GRU(tf.Module):
         super().__init__()
     
 
-    def build_model(self, loss: str="mse", learning_rate: float=0.001, metrics: list=["mean_absolute_error"]):
+    def build_model(self, loss: str="mse", learning_rate: float=0.001, metrics: list=["mean_absolute_percentage_error"]):
         self.model = Sequential([layers.Input((100, 3)),
                     layers.GRU(units=128, activation='tanh'),
                     layers.Dense(256, activation="relu"),

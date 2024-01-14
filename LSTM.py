@@ -2,7 +2,7 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
 from keras.optimizers import Adam
-from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.metrics import mean_absolute_percentage_error
 from keras import layers
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
@@ -47,7 +47,7 @@ model = Sequential([layers.Input((100, 3)),
 
 model.compile(loss="mse",
             optimizer=Adam(learning_rate=0.001),
-            metrics=['mean_absolute_error'])
+            metrics=['mean_absolute_percentage_error'])
 
 earlyStopping = EarlyStopping(monitor='val_loss',
                             patience=3,
@@ -60,16 +60,12 @@ modelCheckpoint = ModelCheckpoint(filepath="best_lstm.h5",
 history = model.fit(X_train, y_train, epochs=200, validation_data=(X_test, y_test))
 
 pred = model.predict(X_test).flatten()
+print(pred.shape)
 
 from helpers.metrics import accuracy
 
-acc = accuracy(pred, y_test)
-print(f"Accuracy: {acc:.2f}")
+mae = mean_absolute_percentage_error(y_test, pred)
 
-mae = mean_absolute_error(y_test, pred)
-
-r2 = r2_score(pred, y_test)
-print(f"R2 Score: {r2:.2f}")
 
 
 print(f"\n\nPredicted values: {pred}")

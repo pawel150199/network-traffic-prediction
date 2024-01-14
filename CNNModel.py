@@ -4,6 +4,7 @@ from keras.optimizers import Adam
 from keras import layers
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_percentage_error
 
 from helpers.import_data import import_data
 
@@ -16,7 +17,7 @@ class CNN(tf.Module):
         super().__init__()
         
 
-    def build_model(self, loss: str="mse", learning_rate: float=0.001, metrics: list=["mean_absolute_error"]):
+    def build_model(self, loss: str="mse", learning_rate: float=0.001, metrics: list=["mean_absolute_percentage_error"]):
         self.model = Sequential([layers.Conv2D(filters=32, kernel_size=(3,3), padding="same", activation="relu", input_shape=(25,12,1)),
                     layers.Conv2D(filters=32, kernel_size=(3,3), padding="same", activation="relu"),
                     layers.MaxPooling2D(pool_size=(2,2)),

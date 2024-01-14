@@ -39,7 +39,7 @@ class Evaluator(object):
                 for clf_id, clf_name in enumerate(clfs):
                     X_test = X[test]
                     X_train = X[train]
-                    if clf_name in ["CART", "KNN", "SVR", "RF"]:
+                    if clf_name in ["CART", "KNN", "SVR", "RF", "MLP", "LR"]:
                         X_test = X_test.reshape((len(test),300))
                         X_train = X_train.reshape((len(train),300))
                     clf = clfs[clf_name]

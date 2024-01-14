@@ -1,10 +1,11 @@
 import warnings
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_absolute_percentage_error
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.neural_network import MLPRegressor
+from sklearn.linear_model import LinearRegression
 
 from helpers.import_data import import_data
 from helpers.evaluation import Evaluator
@@ -28,15 +29,16 @@ def main(name: str, dataset: str):
         "KNN" : KNeighborsRegressor(),
         "SVR" : SVR(kernel="poly"),
         "RF" : RandomForestRegressor(random_state=RANDOM_STATE),
-        "LSTM" : LSTM().build_model(),
-        "GRU" : GRU().build_model(),
-        "CNN" : CNN().build_model()
+        "MLP" : MLPRegressor(hidden_layer_sizes=50, batch_size=25, random_state=RANDOM_STATE, warm_start=True),
+        "LR" : LinearRegression(),
+        #"LSTM" : LSTM().build_model(),
+        #"GRU" : GRU().build_model(),
+        #"CNN" : CNN().build_model()
     }
 
     # Metrics
     metrics = {
-        "MSE" : mean_squared_error,
-        "MAE" : mean_absolute_error
+        "MAPE" : mean_absolute_percentage_error
     }
 
     ev = Evaluator(storage_dir="results", X=X, y=y, random_state=RANDOM_STATE, metrics=metrics)
@@ -45,4 +47,4 @@ def main(name: str, dataset: str):
 
 if __name__ == "__main__":
     main(name="main_evaluation_euro28", dataset="Euro28")
-    main(name="main_evaluation_us26", dataset="US26")
+    #main(name="main_evaluation_us26", dataset="US26")
