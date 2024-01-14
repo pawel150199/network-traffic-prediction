@@ -29,22 +29,22 @@ class StatisticTest():
             std = self.evaluator.std
             metrics = list(self.evaluator.metrics.keys())
             clfs = list(self.evaluator.clfs.keys())
-            datasets = self.evaluator.datasets
+            parameters = ["highestSlot", "avgHighestSlot", "sumOfSlots", "avgActiveTransceivers"]
             n_clfs = len(clfs)
             t = []
             # Generate tables 
             for m_id, m_name in enumerate(metrics):
                 t.append([db_fmt % m_name])
-                for db_idx, db_name in enumerate(datasets):
+                for param_idx, param_name in enumerate(parameters):
                     # Mean value
-                    t.append(['']+[db_fmt % db_name] + ["%.3f" % v for v in mean_scores[db_idx, :, m_id]])
+                    t.append(['']+[db_fmt % param_name] + ["%.3f" % v for v in mean_scores[param_idx, :, m_id]])
                     # If std_fmt is not None, std will appear in tables
                     if std_fmt:
-                        t.append([''] + [std_fmt % v for v in std[db_idx, :, m_id]])
+                        t.append([''] + [std_fmt % v for v in std[param_idx, :, m_id]])
                     # Calculate T and P for T-studenta test
                     T, p = np.array(
-                        [[ttest_ind(scores[db_idx, :, i],
-                            scores[db_idx, :, j])
+                        [[ttest_ind(scores[param_idx, :, i],
+                            scores[param_idx, :, j])
                         for i in range(len(clfs))]
                         for j in range(len(clfs))]
                     ).swapaxes(0, 2)
@@ -57,7 +57,7 @@ class StatisticTest():
                                     for c in conclusions])
 
             # Show outputs  
-            headers = ['Metric','Dataset']
+            headers = ['Metric','Parameter']
             for i in clfs:
                 headers.append(i)
             print(tabulate(t, headers))
