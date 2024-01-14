@@ -32,9 +32,9 @@ def main(name: str, dataset: str):
         "RF" : RandomForestRegressor(random_state=RANDOM_STATE),
         "MLP" : MLPRegressor(hidden_layer_sizes=50, batch_size=25, random_state=RANDOM_STATE, warm_start=True),
         "LR" : LinearRegression(),
-        "LSTM" : LSTM().build_model(),
-        "GRU" : GRU().build_model(),
-        "CNN" : CNN().build_model()
+        #"LSTM" : LSTM().build_model(),
+        #"GRU" : GRU().build_model(),
+        #"CNN" : CNN().build_model()
     }
 
     # Metrics
@@ -51,9 +51,9 @@ def main(name: str, dataset: str):
     ev.evaluate(clfs, result_name=f"scores_{name}")
     ev.process_ranks(result_name=f"ranks_{name}")
     st = StatisticTest(ev)
-    st.process(table_name="tstudent_{name}")
+    st.process(table_name=f"tstudent_{name}")
 
 
 if __name__ == "__main__":
     main(name="main_evaluation_euro28", dataset="Euro28")
-    main(name="main_evaluation_us26", dataset="US26")
+    #main(name="main_evaluation_us26", dataset="US26")

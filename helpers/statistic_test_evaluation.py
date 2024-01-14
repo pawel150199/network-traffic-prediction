@@ -60,19 +60,11 @@ class StatisticTest:
                                 if len(c) > 0 and len(c) < len(clfs)-1 else ("all" if len(c) == len(clfs)-1 else nc)
                                 for c in conclusions])
 
-                t.append(
-                    [""] + [""] + [ ", ".join(["%i" % i for i in c])
-                        if len(c) > 0 and len(c) < len(clfs) - 1
-                        else ("all" if len(c) == len(clfs) - 1 else nc)
-                        for c in conclusions
-                    ]
-                )
-
             # Show outputs
             headers = ["Parameter"]
             for i in clfs:
                 headers.append(i)
-            print(tabulate(t, headers))
+            print(tabulate(t, headers, tablefmt="grid"))
 
             # Save outputs as .tex extension
             with open("tables/%s.txt" % (table_name), "w") as f:
