@@ -40,9 +40,14 @@ class Evaluator(object):
             print(self.y[:, param_id])
             for fold_id, (train, test) in enumerate(rskf.split(X, y)):
                 for clf_id, clf_name in enumerate(clfs):
+                    X_test = X[test]
+                    X_train = X[train]
+                    if clf_name in ["CART", "KNN", "SVR", "RF"]:
+                        X_test = X_test.reshape((len(test),300))
+                        X_train = X_train.reshape((len(train),300))
                     clf = clfs[clf_name]
-                    clf.fit(X[train], y[train])
-                    y_pred = clf.predict(X[test])
+                    clf.fit(X_train, y[train])
+                    y_pred = clf.predict(X_test)
                     for metric_id, metric_name in enumerate(self.metrics):
                         # PARAM X FOLD X CLASSIFIER X METRIC 
                         self.scores[param_id, fold_id, clf_id, metric_id] = self.metrics[metric_name](y[test],y_pred)

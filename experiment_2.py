@@ -11,6 +11,7 @@ import warnings
 
 from helpers.import_data import import_data
 from helpers.evaluation import Evaluator
+from LSTMModel import LSTM
 
 
 warnings.filterwarnings("ignore")
@@ -21,15 +22,14 @@ def main(name: str, dataset: str):
 
     # Import data
     X, y = import_data(dataset)
-    X = X.reshape(100,300)
-    y = y
 
     # Clasificators
     clfs = {
         "CART" : DecisionTreeRegressor(random_state=RANDOM_STATE),
         "KNN" : KNeighborsRegressor(),
         "SVR" : SVR(kernel="poly"),
-        "RF" : RandomForestRegressor(random_state=RANDOM_STATE)
+        "RF" : RandomForestRegressor(random_state=RANDOM_STATE),
+        "LSTM" : LSTM().build_model()
     }
 
     # Metrics
