@@ -58,7 +58,6 @@ class Evaluator(object):
         for param_id in range(4):
             X = self.X
             y = self.y[:, param_id]
-            print(self.y[:, param_id])
             for fold_id, (train, test) in enumerate(rskf.split(X, y)):
                 for clf_id, clf_name in enumerate(clfs):
                     X_test = X[test]

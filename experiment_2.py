@@ -26,20 +26,15 @@ def main(name: str, dataset: str):
 
     # Clasificators
     clfs = {
-        "CART": DecisionTreeRegressor(random_state=RANDOM_STATE),
-        "KNN": KNeighborsRegressor(),
-        "SVR": SVR(kernel="poly"),
-        "RF": RandomForestRegressor(random_state=RANDOM_STATE),
-        # "MLP": MLPRegressor(
-        #     hidden_layer_sizes=50,
-        #     batch_size=25,
-        #     random_state=RANDOM_STATE,
-        #     warm_start=True,
-        # ),
-        # "LR": LinearRegression(),
-        # "LSTM": LSTM().build_model(),
-        # "GRU": GRU().build_model(),
-        # "CNN": CNN().build_model(),
+        "CART" : DecisionTreeRegressor(random_state=RANDOM_STATE),
+        "KNN" : KNeighborsRegressor(),
+        "SVR" : SVR(kernel="poly"),
+        "RF" : RandomForestRegressor(random_state=RANDOM_STATE),
+        "MLP" : MLPRegressor(hidden_layer_sizes=50, batch_size=25, random_state=RANDOM_STATE, warm_start=True),
+        "LR" : LinearRegression(),
+        #"LSTM" : LSTM().build_model(),
+        #"GRU" : GRU().build_model(),
+        #"CNN" : CNN().build_model()
     }
 
     # Metrics
