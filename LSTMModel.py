@@ -35,16 +35,16 @@ class LSTM(tf.Module):
             metrics=metrics)
         return self
 
-    def fit(self, X: np.array, y: np.array, epochs: int=200):        
-        self.model.fit(X, y, epochs=epochs)
+    def fit(self, X: np.array, y: np.array, epochs: int=200, verbose: int=0):        
+        self.model.fit(X, y, epochs=epochs, verbose=verbose)
         return self
 
-    def evaluate(self, X: np.array, y: np.array):
-        test_loss, test_acc = self.model.evaluate(X, y)
+    def evaluate(self, X: np.array, y: np.array, epochs: int=200, verbose: int=0):
+        test_loss, test_acc = self.model.evaluate(X, y, epochs=epochs, verbose=verbose)
         print(f'Accuracy: {test_acc}\nTest loss: {test_loss}')
 
-    def predict(self, X: np.array):
-        pred = self.model.predict(X)
+    def predict(self, X: np.array, verbose: int=0):
+        pred = self.model.predict(X, verbose=verbose)
         return np.array(pred).flatten()
 
 if __name__ == "__main__":
