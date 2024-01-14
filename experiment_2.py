@@ -16,35 +16,46 @@ from CNNModel import CNN
 
 warnings.filterwarnings("ignore")
 
-RANDOM_STATE=1410
+RANDOM_STATE = 1410
+
 
 def main(name: str, dataset: str):
-
     # Import data
     X, y = import_data(dataset)
 
     # Clasificators
     clfs = {
-        #"CART" : DecisionTreeRegressor(random_state=RANDOM_STATE),
-        #"KNN" : KNeighborsRegressor(),
-        #"SVR" : SVR(kernel="poly"),
-        #"RF" : RandomForestRegressor(random_state=RANDOM_STATE),
-        #"MLP" : MLPRegressor(hidden_layer_sizes=50, batch_size=25, random_state=RANDOM_STATE, warm_start=True),
-        #"LR" : LinearRegression(),
-        #"LSTM" : LSTM().build_model(),
-        #"GRU" : GRU().build_model(),
-        "CNN" : CNN().build_model()
+        "CART": DecisionTreeRegressor(random_state=RANDOM_STATE),
+        "KNN": KNeighborsRegressor(),
+        "SVR": SVR(kernel="poly"),
+        "RF": RandomForestRegressor(random_state=RANDOM_STATE),
+        # "MLP": MLPRegressor(
+        #     hidden_layer_sizes=50,
+        #     batch_size=25,
+        #     random_state=RANDOM_STATE,
+        #     warm_start=True,
+        # ),
+        # "LR": LinearRegression(),
+        # "LSTM": LSTM().build_model(),
+        # "GRU": GRU().build_model(),
+        # "CNN": CNN().build_model(),
     }
 
     # Metrics
-    metrics = {
-        "MAPE" : mean_absolute_percentage_error
-    }
+    metrics = {"MAPE": mean_absolute_percentage_error}
 
-    ev = Evaluator(storage_dir="results", X=X, y=y, random_state=RANDOM_STATE, metrics=metrics)
+    ev = Evaluator(
+        storage_dir="results",
+        X=X,
+        y=y,
+        random_state=RANDOM_STATE,
+        metrics=metrics,
+        feature_selection=True,
+    )
     ev.evaluate(clfs, result_name=f"scores_{name}")
     ev.process_ranks(result_name=f"ranks_{name}")
 
+
 if __name__ == "__main__":
     main(name="main_evaluation_euro28", dataset="Euro28")
-    #main(name="main_evaluation_us26", dataset="US26")
+    # main(name="main_evaluation_us26", dataset="US26")
