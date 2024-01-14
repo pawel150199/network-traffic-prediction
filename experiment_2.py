@@ -12,6 +12,8 @@ import warnings
 from helpers.import_data import import_data
 from helpers.evaluation import Evaluator
 from LSTMModel import LSTM
+from GRUModel import GRU
+from CNNModel import CNN
 
 
 warnings.filterwarnings("ignore")
@@ -29,7 +31,9 @@ def main(name: str, dataset: str):
         "KNN" : KNeighborsRegressor(),
         "SVR" : SVR(kernel="poly"),
         "RF" : RandomForestRegressor(random_state=RANDOM_STATE),
-        "LSTM" : LSTM().build_model()
+        "LSTM" : LSTM().build_model(),
+        "GRU" : GRU().build_model(),
+        "CNN" : CNN().build_model()
     }
 
     # Metrics
