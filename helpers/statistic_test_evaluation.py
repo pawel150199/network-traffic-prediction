@@ -51,7 +51,6 @@ class StatisticTest:
                     for i in range(len(clfs))]
                     for j in range(len(clfs))]
                 ).swapaxes(0, 2)
-                p = 1 - p
                 _ = np.where((p < alpha) * (T > 0))
                 conclusions = [list(1 + _[1][_[0] == i])
                             for i in range(n_clfs)]
