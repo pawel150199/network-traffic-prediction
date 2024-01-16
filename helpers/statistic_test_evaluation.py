@@ -4,7 +4,6 @@ import warnings
 import os
 from tabulate import tabulate
 from scipy.stats import ttest_ind
-from scipy.stats import ranksums
 
 
 """ 
@@ -51,12 +50,13 @@ class StatisticTest:
                     for i in range(len(clfs))]
                     for j in range(len(clfs))]
                 ).swapaxes(0, 2)
+                T = -T
                 _ = np.where((p < alpha) * (T > 0))
                 conclusions = [list(1 + _[1][_[0] == i])
                             for i in range(n_clfs)]
-        
+                        
                 t.append([''] + [", ".join(["%i" % i for i in c])
-                                if len(c) > 0 and len(c) < len(clfs)-1 else ("all" if len(c) == len(clfs)-1 else nc)
+                                if len(c) > 0 and len(c) < len(clfs) - 1 else ("all" if len(c) == len(clfs)-1 else nc)
                                 for c in conclusions])
 
             # Show outputs

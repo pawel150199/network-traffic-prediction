@@ -75,7 +75,6 @@ class Evaluator(object):
                         X_train = X_train.reshape((len(train), 300))
                     clf = clfs[clf_name]
                     clf.fit(X_train, y[train])
-                    print(X_train.shape)
                     y_pred = clf.predict(X_test)
                     for metric_id, metric_name in enumerate(self.metrics):
                         # PARAM X FOLD X CLASSIFIER X METRIC
