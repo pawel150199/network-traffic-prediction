@@ -1,4 +1,5 @@
 import numpy as np
+import time
 import warnings
 from scipy.stats import rankdata
 from sklearn.model_selection import RepeatedKFold
@@ -15,6 +16,7 @@ class Evaluator(object):
         storage_dir: str = None,
         n_splits: int = 5,
         n_repeats: int = 2,
+        measure_time: bool = False,
         feature_selection=False,
     ):
         """Class is used for evaluate experiment"""
@@ -26,6 +28,7 @@ class Evaluator(object):
         self.storage_dir = storage_dir
         self.X = X
         self.y = y
+        self.measure_time = measure_time
         self.feature_selection = feature_selection
 
         if self.storage_dir is not None:
@@ -73,12 +76,17 @@ class Evaluator(object):
                     elif clf_name == "MLP":
                         X_test = X_test.reshape((len(test), 300))
                         X_train = X_train.reshape((len(train), 300))
+                    start = time.time()
                     clf = clfs[clf_name]
                     clf.fit(X_train, y[train])
                     y_pred = clf.predict(X_test)
+                    end = time.time()
                     for metric_id, metric_name in enumerate(self.metrics):
                         # PARAM X FOLD X CLASSIFIER X METRIC
-                        self.scores[param_id, fold_id, clf_id, metric_id] = self.metrics[metric_name](y[test], y_pred)
+                        if self.measure_time:
+                            self.scores[param_id, fold_id, clf_id, metric_id] = end - start
+                        else:
+                            self.scores[param_id, fold_id, clf_id, metric_id] = self.metrics[metric_name](y[test], y_pred)
 
         self.mean = np.mean(self.scores, axis=1)
         self.std = np.std(self.scores, axis=1)
