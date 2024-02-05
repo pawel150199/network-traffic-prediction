@@ -13,6 +13,9 @@ from helpers.statistic_test_evaluation import StatisticTest
 from LSTMModel import LSTM
 from GRUModel import GRU
 from CNNModel import CNN
+from model.cnn import get_cnn
+from model.gru import get_gru
+from model.lstm import get_lstm
 
 
 warnings.filterwarnings("ignore")
@@ -31,9 +34,9 @@ def experiment2(name: str, dataset: str):
         "RF" : RandomForestRegressor(random_state=RANDOM_STATE),
         "LR" : LinearRegression(),
         "MLP" : MLPRegressor(hidden_layer_sizes=50, batch_size=25, random_state=RANDOM_STATE, warm_start=True),
-        "LSTM" : LSTM().build_model(),
-        "GRU" : GRU().build_model(),
-        "CNN" : CNN().build_model()
+        "LSTM" : get_lstm(),
+        "GRU" : get_gru(),
+        "CNN" : get_cnn()
     }
 
     # Metrics
