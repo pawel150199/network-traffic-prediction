@@ -1,14 +1,12 @@
+import warnings
 import numpy as np
-from keras.models import Sequential
-from keras.optimizers import Adam
-from keras import layers
 import tensorflow as tf
+from keras import layers
+from keras.optimizers import Adam
+from keras.models import Sequential
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
 
 from helpers.import_data import import_data
-
-import warnings
 
 
 warnings.filterwarnings("ignore")

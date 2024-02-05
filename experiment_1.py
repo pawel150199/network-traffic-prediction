@@ -9,6 +9,7 @@ from sklearn.linear_model import LinearRegression
 
 from helpers.import_data import import_data
 from helpers.evaluation import Evaluator
+from concatenate_tests import concatenate_and_statistic_test
 from helpers.statistic_test_evaluation import StatisticTest
 from LSTMModel import LSTM
 from GRUModel import GRU
@@ -19,7 +20,7 @@ warnings.filterwarnings("ignore")
 
 RANDOM_STATE = 1410
 
-def experiment2(name: str, dataset: str):
+def experiment2(name: str, dataset: str, fs: bool):
     # Import data
     X, y = import_data(dataset)
 
@@ -45,14 +46,17 @@ def experiment2(name: str, dataset: str):
         y=y,
         random_state=RANDOM_STATE,
         metrics=metrics,
-        feature_selection=True,
+        feature_selection=fs,
     )
     ev.evaluate(clfs, result_name=f"scores_{name}")
-    ev.process_ranks(result_name=f"ranks_{name}")
-    st = StatisticTest(ev)
-    st.process(table_name=f"{name}")
+
+    
 
 
 if __name__ == "__main__":
-    experiment2(name="experiment_2_euro28", dataset="Euro28")
-    experiment2(name="experiment_2_us26", dataset="US26")
+    experiment2(name="experiment_1_fs_euro28", dataset="Euro28", fs=True)
+    experiment2(name="experiment_1_fs_us26", dataset="US26", fs=True)
+    experiment2(name="experiment_1_euro28", dataset="Euro28", fs=False)
+    experiment2(name="experiment_1_us26", dataset="US26", fs=False)
+    concatenate_and_statistic_test("euro28")
+    concatenate_and_statistic_test("us26")

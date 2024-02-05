@@ -13,7 +13,7 @@ from scipy.stats import ttest_ind
 
 
 
-def main():
+def concatenate_and_statistic_test(datasetname: str):
     RANDOM_STATE = 1410
     alpha=0.05
     m_fmt="%3f"
@@ -24,29 +24,28 @@ def main():
 
     clfs = ["CART", "SVR", "KNN", "RF", "LR", "CART-FS", "SVR-FS", "KNN-FS", "RF-FS", "LR-FS"]    
 
-    scores_1 = np.load("results/scores_part_simple_euro28.npy")
-    scores_2 = np.load("results/scores_part_simple_feature_selection_euro28.npy")
+    scores_1 = np.load(f"results/scores_experiment_1_{datasetname}.npy")
+    scores_2 = np.load(f"results/scores_experiment_1_fs_{datasetname}.npy")
     scores = np.concatenate((scores_1, scores_2), axis=2)
     
-
-    mean_scores_1 = np.load("results/scores_part_simple_euro28-mean.npy")
-    mean_scores_2 = np.load("results/scores_part_simple_feature_selection_euro28-mean.npy")
+    mean_scores_1 = np.load(f"results/scores_experiment_1_{datasetname}-mean.npy")
+    mean_scores_2 = np.load(f"results/scores_experiment_1_fs_{datasetname}-mean.npy")
     mean_scores = np.concatenate((mean_scores_1, mean_scores_2), axis=1)
    
-    std_1 = np.load("results/scores_part_simple_euro28-std.npy")
-    std_2 = np.load("results/scores_part_simple_feature_selection_euro28-std.npy")
+    std_1 = np.load(f"results/scores_experiment_1_{datasetname}-std.npy")
+    std_2 = np.load(f"results/scores_experiment_1_fs_{datasetname}-std.npy")
     std = np.concatenate((std_1, std_2), axis=1)
 
-    np.save("results/scores_experiment_1_euro28", scores)
-    np.save("results/scores_experiment_1_euro28-mean", mean_scores)
-    np.save("results/scores_experiment_1_euro28-std", std)
+    os.remove(f"results/scores_experiment_1_fs_{datasetname}.npy")
+    os.remove(f"results/scores_experiment_1_fs_{datasetname}-mean.npy")
+    os.remove(f"results/scores_experiment_1_fs_{datasetname}-std.npy")
+    
+    np.save(f"results/scores_experiment_1_{datasetname}", scores)
+    np.save(f"results/scores_experiment_1_{datasetname}-mean", mean_scores)
+    np.save(f"results/scores_experiment_1_{datasetname}-std", std)
 
-    parameters = [
-        "highestSlot",
-        "avgHighestSlot",
-        "sumOfSlots",
-        "avgActiveTransceivers",
-    ]
+
+    parameters = ["highestSlot", "avgHighestSlot", "sumOfSlots", "avgActiveTransceivers"]
 
     n_clfs = len(clfs)
     t = []
@@ -79,7 +78,7 @@ def main():
 
     print(tabulate(t, headers, tablefmt="grid"))
     # Save outputs as .tex extension
-    with open("tables/%s.txt" % ("experiment_1_euro28"), "w") as f:
+    with open("tables/%s.txt" % (f"experiment_1_{datasetname}"), "w") as f:
         f.write(tabulate(t, headers, tablefmt="latex"))
 
 if __name__ == "__main__":
